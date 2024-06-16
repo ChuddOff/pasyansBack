@@ -114,6 +114,20 @@ class Zamer{
           }
      }
 
+     async getProfile(req, res) {
+          try {
+               const name = req.query.name;
+
+               const data = await pacyansProfile.find(name);
+
+               res.json(data);
+          }
+          catch(err) {
+               console.error(err);
+               res.status(500).json({ message: 'Internal server error' });
+          }
+     }
+
 
 
 

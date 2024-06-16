@@ -8,5 +8,6 @@ router.post("/postProfile", Zamer.postProfile)
 router.post("/postTimeeasy", Zamer.postTimeEasy)
 router.post("/postTimehard", Zamer.postTimeHard)
 router.post("/postElo", Zamer.postElo)
+router.get("/getProfile", Zamer.getProfile)
  
 export default router
