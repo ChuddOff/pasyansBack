@@ -5,8 +5,7 @@ import Zamer from '../controllers/zamer.js'
 router.get("/test", Zamer.test)
 
 router.post("/postProfile", Zamer.postProfile)
-router.post("/postTimeeasy", Zamer.postTimeEasy)
-router.post("/postTimehard", Zamer.postTimeHard)
+router.post("/postTime", Zamer.postTime)
 router.post("/postElo", Zamer.postElo)
 router.get("/getProfile", Zamer.getProfile)
  

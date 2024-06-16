@@ -5,7 +5,9 @@ class Zamer{
           try { 
                const {name, eloChange} = req.body;
 
-               const newProfile = await pacyansProfile.findOne({name});
+               const newProfile = await pacyansProfile.findOne({
+                    name: name
+               });
 
                if (!newProfile) {
                     res.status(404).json({
@@ -15,6 +17,8 @@ class Zamer{
                }
 
                newProfile.elo += eloChange;
+
+               newProfile.elo = newProfile.elo < 0 ? newProfile.elo = 0 : newProfile.elo
 
                await newProfile.save();
                res.status(201).json({
@@ -26,9 +30,9 @@ class Zamer{
                console.log(e, 'ЗАМЕРА не будет');
           }
      }
-     async postTimeEasy(req, res) {
+     async postTime(req, res) {
           try {
-               const {name, seconds} = req.body;
+               const {type, name, seconds} = req.body;
 
                const newProfile = await pacyansProfile.findOne({name});
 
@@ -39,7 +43,14 @@ class Zamer{
                     return;
                }
 
-               newProfile.bestEasy = seconds;
+               switch (type) {
+                    case 'hard':
+                         newProfile.bestHard = seconds;
+                         break;
+                    case 'easy':
+                         newProfile.bestEasy = seconds;
+                         break;
+               }
 
                await newProfile.save();
                res.status(201).json({
@@ -116,9 +127,11 @@ class Zamer{
 
      async getProfile(req, res) {
           try {
-               const name = req.query.name;
+               const {name} = req.query;
 
-               const data = await pacyansProfile.find(name);
+               const data = await pacyansProfile.find({
+                    name: name
+               });
 
                res.json(data);
           }
