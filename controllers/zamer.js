@@ -1,4 +1,4 @@
-import {lodzi, lodziExtensive, pacyansProfile} from '../models/model.js';
+import {lodzi, lodziExtensive, pacyansProfile, pacyansTopEasy, pacyansTopHard} from '../models/model.js';
 
 class Zamer{
      async postElo(req, res) {
@@ -34,7 +34,7 @@ class Zamer{
           try {
                const {type, name, seconds} = req.body;
 
-               const newProfile = await pacyansProfile.findOne({name});
+               const newProfile = await pacyansProfile.findOne({name: name});
 
                if (!newProfile) {
                     res.status(404).json({
@@ -45,10 +45,10 @@ class Zamer{
 
                switch (type) {
                     case 'hard':
-                         newProfile.bestHard = seconds;
+                         newProfile.bestHard = newProfile.bestHard>seconds ? seconds : newProfile.bestHard;
                          break;
                     case 'easy':
-                         newProfile.bestEasy = seconds;
+                         newProfile.bestEasy = newProfile.bestEasy>seconds ? seconds : newProfile.bestEasy;
                          break;
                }
 
@@ -63,11 +63,11 @@ class Zamer{
           }
      }
 
-     async postTimeHard(req, res) {
+     async postWin(req, res) {
           try {
-               const {name, seconds} = req.body;
+               const {name} = req.body;
 
-               const newProfile = await pacyansProfile.findOne({name});
+               const newProfile = await pacyansProfile.findOne({name: name});
 
                if (!newProfile) {
                     res.status(404).json({
@@ -76,7 +76,36 @@ class Zamer{
                     return;
                }
 
-               newProfile.bestHard = seconds;
+               newProfile.wins += 1
+               newProfile.fails -= 1
+
+               console.log(newProfile);
+
+               await newProfile.save();
+               res.status(201).json({
+                    message: 'Успех'
+               });
+          
+          }
+          catch(e) {
+               console.log(e, 'ЗАМЕРА не будет');
+          }
+     }
+
+     async postFail(req, res) {
+          try {
+               const {name} = req.body;
+
+               const newProfile = await pacyansProfile.findOne({name: name});
+
+               if (!newProfile) {
+                    res.status(404).json({
+                         message: 'Не найден'
+                    })
+                    return;
+               }
+               
+               newProfile.fails += 1
 
                await newProfile.save();
                res.status(201).json({
@@ -132,6 +161,21 @@ class Zamer{
                const data = await pacyansProfile.find({
                     name: name
                });
+
+               res.json(data);
+          }
+          catch(err) {
+               console.error(err);
+               res.status(500).json({ message: 'Internal server error' });
+          }
+     }
+
+     async getAll(req, res) {
+          try {
+               const {type} = req.query;
+
+               const data = await pacyansProfile.find();
+
 
                res.json(data);
           }

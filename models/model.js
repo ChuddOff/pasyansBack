@@ -84,6 +84,33 @@ const SchemaPacyansProfile = new mongoose.Schema({
     }
 });
 
+const SchemaPacyansTopEasy = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        unique: false
+    },
+    top: {
+        type: Array,
+        required: true,
+        unique: false
+    }
+});
+const SchemaPacyansTopHard = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        unique: false
+    },
+    top: {
+        type: Array,
+        required: true,
+        unique: false
+    }
+});
+
 export const lodzi  = new mongoose.model('Zamer', Schema);
 export const lodziExtensive  = new mongoose.model('ZamerExtensive', SchemaExtensive);
 export const pacyansProfile  = new mongoose.model('pasyans_profile', SchemaPacyansProfile); 
+export const pacyansTopEasy  = new mongoose.model('pasyans_top', SchemaPacyansTopEasy); 
+export const pacyansTopHard  = new mongoose.model('pasyans_top', SchemaPacyansTopHard); 
