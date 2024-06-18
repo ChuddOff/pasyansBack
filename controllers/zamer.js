@@ -121,7 +121,7 @@ class Zamer{
 
      async postProfile(req, res) {
           try {
-               const {name} = req.body;
+               const {name, fullName, url} = req.body;
 
                const isNotNewEl = await pacyansProfile.findOne({
                     name: name
@@ -140,7 +140,8 @@ class Zamer{
                     bestHard: 0,
                     wins: 0,
                     fails: 0,
-
+                    fullName: fullName,
+                    url: url
                })
 
                await newProfile.save();
@@ -171,7 +172,7 @@ class Zamer{
      }
 
      async getAll(req, res) {
-          try {
+          try { 
                const data = await pacyansProfile.find().sort({'elo': -1});
 
                res.json(data);
