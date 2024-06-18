@@ -1,4 +1,4 @@
-import {lodzi, lodziExtensive, pacyansProfile, pacyansTopEasy, pacyansTopHard} from '../models/model.js';
+import {pacyansProfile} from '../models/model.js';
 
 class Zamer{
      async postElo(req, res) {
@@ -45,10 +45,10 @@ class Zamer{
 
                switch (type) {
                     case 'hard':
-                         newProfile.bestHard = newProfile.bestHard>seconds ? seconds : newProfile.bestHard;
+                         newProfile.bestHard = newProfile.bestHard<seconds ? seconds : newProfile.bestHard;
                          break;
                     case 'easy':
-                         newProfile.bestEasy = newProfile.bestEasy>seconds ? seconds : newProfile.bestEasy;
+                         newProfile.bestEasy = newProfile.bestEasy<seconds ? seconds : newProfile.bestEasy;
                          break;
                }
 
@@ -126,10 +126,10 @@ class Zamer{
                const isNotNewEl = await pacyansProfile.findOne({
                     name: name
                })
-               if (isNotNewEl) {
-                    res.status(409).json({
-                         message: 'Уже имеется'
-                    })
+               if (isNotNewEl) {   
+                    res.status(201).json({
+                         message: 'Успех, но он имеется'
+                    });
                     return;
                }
 
@@ -172,10 +172,7 @@ class Zamer{
 
      async getAll(req, res) {
           try {
-               const {type} = req.query;
-
-               const data = await pacyansProfile.find();
-
+               const data = await pacyansProfile.find().sort({'elo': -1});
 
                res.json(data);
           }
